@@ -29,10 +29,27 @@ def test(description, recipient):
 
     print(blockchain.chain)
 
-test("D", "A")
+test("Textbook", "A")
 print("Past Data from test.py: {}".format(blockchain.past_data))
 while not (login.getLoggedIn()):
     login.LogIn()
 
-list_of_desc = ['D']
+list_of_desc = ['Textbook']
+list_of_what_you_own = []
 print(blockchain.whoOwnsWhat(list_of_desc))
+for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
+    if (value == login.getUsername()):
+        list_of_what_you_own.append(key)
+
+print("You currently own: {}".format(list_of_what_you_own))
+
+while True:
+    answer = input("Do you want to transfer something you own to someone else (Y/N)? ")
+    if answer == "Y":
+        recipient = input("Who's the recipient? Type in their username exactly correct: ")
+        description = input("What is the description? Type in exactly as stated in your list of assets printed above: ")
+        login.new_data(recipient, description, blockchain, list_of_desc)
+        print("DONE!!!")
+    else:
+        print("Exiting now!")
+        break

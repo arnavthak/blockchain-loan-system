@@ -1,3 +1,6 @@
+from loanCoin import BlockChain
+from loanCoin import Block
+
 class Login:
     def __init__(self, creds):
         self.creds = creds
@@ -34,3 +37,19 @@ class Login:
         self.logged_in = False
         self.user_name = None
         self.password = None
+
+    def new_data(self, recipient, description, blockchain, list_of_desc):
+        list_of_what_you_own = []
+        for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
+            if (value == self.getUsername()):
+                list_of_what_you_own.append(key)
+        if description not in list_of_what_you_own:
+            return False
+
+        blockchain.new_data(
+            sender=self.getUsername(),
+            recipient=recipient,
+            description=description
+        )
+
+        return True
