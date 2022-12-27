@@ -2,44 +2,44 @@ import hashlib
 import time
 
 class Block:
-    def __init__(self, index, proof_no, prev_hash, description, data, timestamp=None):
+    def __init__(self, index, proof_no, prev_hash, data, timestamp=None):
         self.index = index
         self.proof_no = proof_no
         self.prev_hash = prev_hash
-        self.description = description
         self.data = data
         self.timestamp = timestamp or time.time()
 
     @property
     def calculate_hash(self):
         block_of_string = "{}{}{}{}{}".format(self.index, self.proof_no,
-                                              self.prev_hash, self.description,
+                                              self.prev_hash,
                                               self.data, self.timestamp)
         return hashlib.sha256(block_of_string.encode()).hexdigest()
 
     def __repr__(self):
         return "{} - {} - {} - {} - {}".format(self.index, self.proof_no,
-                                               self.prev_hash, self.description,
+                                               self.prev_hash,
                                                self.data, self.timestamp)
 
 class BlockChain:
     def __init__(self):
         self.chain = []
         self.current_data = []
+        self.past_data = []
         self.nodes = set()
         self.construct_genesis()
 
     def construct_genesis(self):
-        self.construct_block(proof_no=0, prev_hash=0, description=0)
+        self.construct_block(proof_no=0, prev_hash=0)
 
-    def construct_block(self, proof_no, prev_hash, description):
+    def construct_block(self, proof_no, prev_hash):
         block = Block(
             index=len(self.chain),
             proof_no=proof_no,
             prev_hash=prev_hash,
-            description=description,
             data=self.current_data
         )
+        self.past_data.append(self.current_data)
         self.current_data = []
 
         self.chain.append(block)
@@ -64,7 +64,42 @@ class BlockChain:
             'recipient': recipient,
             'description': description
         })
+        print("JUST APPENDED TO CURRENT DATA: {}, {}, {}".format(sender, recipient, description))
         return True
+
+    def whoOwnsWhat(self, list_of_descriptions):
+        items_owned = {}
+        for description in list_of_descriptions:
+            items_owned[description] = None
+
+        curr_desc_data = []
+        for arr in self.past_data:
+            for dict in arr:
+                curr_desc_data.append(dict['description'])
+        curr_recipient_data = []
+        for arr in self.past_data:
+            for dict in arr:
+                curr_recipient_data.append(dict['recipient'])
+        print("Current Description Data: {}".format(curr_desc_data))
+        print("Current Recipient Data: {}".format(curr_recipient_data))
+
+        next = 0
+        next_owner = 0
+        for desc in list_of_descriptions:
+            print("Description this iteration is {}".format(desc))
+            while next != 0.01:
+                try:
+                    next = curr_desc_data.index(desc)
+                    print("Next variable this iteration is {}".format(next))
+                    next_owner = curr_recipient_data[next]
+                    curr_desc_data.pop(next)
+                    curr_recipient_data.pop(next)
+                except ValueError:
+                    next = 0.01
+            items_owned[desc] = next_owner
+
+        return items_owned
+
 
     @staticmethod
     def proof_of_work(last_proof):
