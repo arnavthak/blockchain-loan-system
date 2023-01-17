@@ -9,6 +9,12 @@ class Login:
         self.user_name = None
         self.password = None
 
+    def logout(self):
+        self.logged_in = False
+        self.user_name = None
+        self.password = None
+        print("You have been logged out successfully!") 
+
     def LogIn(self):
         self.user_name = str(input("Username: "))
         self.password = str(input("Password: "))
@@ -44,6 +50,7 @@ class Login:
             if (value == self.getUsername()):
                 list_of_what_you_own.append(key)
         if description not in list_of_what_you_own:
+            print("You did not own this item, thus nothing was transferred!")
             return False
 
         blockchain.new_data(

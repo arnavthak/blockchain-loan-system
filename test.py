@@ -44,12 +44,20 @@ for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
 print("You currently own: {}".format(list_of_what_you_own))
 
 while True:
-    answer = input("Do you want to transfer something you own to someone else (Y/N)? ")
+    answer = input("Do you want to transfer something you own to someone else (Y/N/LOGOUT)? ")
     if answer == "Y":
         recipient = input("Who's the recipient? Type in their username exactly correct: ")
         description = input("What is the description? Type in exactly as stated in your list of assets printed above: ")
         login.new_data(recipient, description, blockchain, list_of_desc)
         print("DONE!!!")
+    elif answer == "LOGOUT":
+        login.logout()
+        while not (login.getLoggedIn()):
+            login.LogIn()
+        for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
+            if (value == login.getUsername()):
+                list_of_what_you_own.append(key)
+        print("You currently own: {}".format(list_of_what_you_own))
     else:
         print("Exiting now!")
         break
