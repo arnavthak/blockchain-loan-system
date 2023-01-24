@@ -25,7 +25,6 @@ class BlockChain:
     def __init__(self):
         self.chain = []
         self.current_data = []
-        self.past_data = []
         self.nodes = set()
         self.construct_genesis()
 
@@ -39,7 +38,6 @@ class BlockChain:
             prev_hash=prev_hash,
             data=self.current_data
         )
-        self.past_data.append(self.current_data)
         self.current_data = []
 
         self.chain.append(block)
@@ -65,21 +63,20 @@ class BlockChain:
             'description': description
         })
         print("JUST APPENDED TO CURRENT DATA: {}, {}, {}".format(sender, recipient, description))
+        print("Current data in loanCoin.py: {}".format(self.current_data))
         return True
 
     def whoOwnsWhat(self, list_of_descriptions):
         items_owned = {}
-        for description in list_of_descriptions:
-            items_owned[description] = None
+        '''for description in list_of_descriptions:
+            items_owned[description] = None'''
 
         curr_desc_data = []
-        for arr in self.past_data:
-            for dict in arr:
-                curr_desc_data.append(dict['description'])
+        for dictionary in self.current_data:
+                curr_desc_data.append(dictionary['description'])
         curr_recipient_data = []
-        for arr in self.past_data:
-            for dict in arr:
-                curr_recipient_data.append(dict['recipient'])
+        for dictionary in self.current_data:
+            curr_recipient_data.append(dictionary['recipient'])
         print("Current Description Data: {}".format(curr_desc_data))
         print("Current Recipient Data: {}".format(curr_recipient_data))
 
@@ -90,14 +87,20 @@ class BlockChain:
             while next != 0.01:
                 try:
                     next = curr_desc_data.index(desc)
-                    print("Next variable this iteration is {}".format(next))
                     next_owner = curr_recipient_data[next]
+                    print("Next owner this iteration is {}".format(next_owner))
                     curr_desc_data.pop(next)
                     curr_recipient_data.pop(next)
                 except ValueError:
                     next = 0.01
-            items_owned[desc] = next_owner
+            print("Final next owner is {}".format(next_owner))
+            print("Final description is {}".format(desc))
+            if desc not in items_owned:
+                items_owned[desc] = next_owner
+            else:
+                print("Condition failed. Items owned dict: {}".format(items_owned))
 
+        print("Final items owned dict: {}".format(items_owned))
         return items_owned
 
 

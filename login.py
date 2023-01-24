@@ -8,11 +8,13 @@ class Login:
         self.logged_in = False
         self.user_name = None
         self.password = None
+        self.list_of_what_you_own = []
 
     def logout(self):
         self.logged_in = False
         self.user_name = None
         self.password = None
+        self.list_of_what_you_own = []
         print("You have been logged out successfully!") 
 
     def LogIn(self):
@@ -45,11 +47,11 @@ class Login:
         self.password = None
 
     def new_data(self, recipient, description, blockchain, list_of_desc):
-        list_of_what_you_own = []
+        #list_of_what_you_own = []
         for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
             if (value == self.getUsername()):
-                list_of_what_you_own.append(key)
-        if description not in list_of_what_you_own:
+                self.list_of_what_you_own.append(key)
+        if description not in self.list_of_what_you_own:
             print("You did not own this item, thus nothing was transferred!")
             return False
 

@@ -14,9 +14,13 @@ cred_list = {
 login = Login(cred_list)
 
 def test(description, recipient):
+    blockchain.construct_genesis()
     last_block = blockchain.lastest_block
     last_proof_no = last_block.proof_no
     proof_no = blockchain.proof_of_work(last_proof_no)
+
+    last_hash = last_block.calculate_hash
+    block = blockchain.construct_block(proof_no, last_hash)
 
     blockchain.new_data(
         sender="South Windsor High School",
@@ -24,13 +28,10 @@ def test(description, recipient):
         description=description
     )
 
-    last_hash = last_block.calculate_hash
-    block = blockchain.construct_block(proof_no, last_hash)
-
     print(blockchain.chain)
 
 test("Textbook", "A")
-print("Past Data from test.py: {}".format(blockchain.past_data))
+print("Current Data from test.py: {}".format(blockchain.current_data))
 while not (login.getLoggedIn()):
     login.LogIn()
 
@@ -51,6 +52,7 @@ while True:
         login.new_data(recipient, description, blockchain, list_of_desc)
         print("DONE!!!")
     elif answer == "LOGOUT":
+        list_of_what_you_own = []
         login.logout()
         while not (login.getLoggedIn()):
             login.LogIn()
