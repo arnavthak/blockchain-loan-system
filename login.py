@@ -46,7 +46,7 @@ class Login:
         self.user_name = None
         self.password = None
 
-    def new_data(self, recipient, description, blockchain, list_of_desc):
+    def new_data(self, recipient, description, blockchain, list_of_desc, cred_list):
         #list_of_what_you_own = []
         for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
             if (value == self.getUsername()):
@@ -54,7 +54,9 @@ class Login:
         if description not in self.list_of_what_you_own:
             print("You did not own this item, thus nothing was transferred!")
             return False
-
+        if recipient not in cred_list.keys():
+            print("Recipient does not exist, thus nothing was transferred!")
+            return False
         blockchain.new_data(
             sender=self.getUsername(),
             recipient=recipient,

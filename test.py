@@ -28,16 +28,16 @@ def test(description, recipient):
         description=description
     )
 
-    print(blockchain.chain)
+    #print(blockchain.chain)
 
 test("Textbook", "A")
-print("Current Data from test.py: {}".format(blockchain.current_data))
+#print("Current Data from test.py: {}".format(blockchain.current_data))
 while not (login.getLoggedIn()):
     login.LogIn()
 
 list_of_desc = ['Textbook']
 list_of_what_you_own = []
-print(blockchain.whoOwnsWhat(list_of_desc))
+#print(blockchain.whoOwnsWhat(list_of_desc))
 for key, value in blockchain.whoOwnsWhat(list_of_desc).items():
     if (value == login.getUsername()):
         list_of_what_you_own.append(key)
@@ -49,8 +49,8 @@ while True:
     if answer == "Y":
         recipient = input("Who's the recipient? Type in their username exactly correct: ")
         description = input("What is the description? Type in exactly as stated in your list of assets printed above: ")
-        login.new_data(recipient, description, blockchain, list_of_desc)
-        print("DONE!!!")
+        login.new_data(recipient, description, blockchain, list_of_desc, cred_list)
+        #print("DONE!!!")
     elif answer == "LOGOUT":
         list_of_what_you_own = []
         login.logout()

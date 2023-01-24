@@ -62,8 +62,8 @@ class BlockChain:
             'recipient': recipient,
             'description': description
         })
-        print("JUST APPENDED TO CURRENT DATA: {}, {}, {}".format(sender, recipient, description))
-        print("Current data in loanCoin.py: {}".format(self.current_data))
+        #print("JUST APPENDED TO CURRENT DATA: {}, {}, {}".format(sender, recipient, description))
+        #print("Current data in loanCoin.py: {}".format(self.current_data))
         return True
 
     def whoOwnsWhat(self, list_of_descriptions):
@@ -77,30 +77,28 @@ class BlockChain:
         curr_recipient_data = []
         for dictionary in self.current_data:
             curr_recipient_data.append(dictionary['recipient'])
-        print("Current Description Data: {}".format(curr_desc_data))
-        print("Current Recipient Data: {}".format(curr_recipient_data))
+        #print("Current Description Data: {}".format(curr_desc_data))
+        #print("Current Recipient Data: {}".format(curr_recipient_data))
 
         next = 0
         next_owner = 0
         for desc in list_of_descriptions:
-            print("Description this iteration is {}".format(desc))
+            #print("Description this iteration is {}".format(desc))
             while next != 0.01:
                 try:
                     next = curr_desc_data.index(desc)
                     next_owner = curr_recipient_data[next]
-                    print("Next owner this iteration is {}".format(next_owner))
+                    #print("Next owner this iteration is {}".format(next_owner))
                     curr_desc_data.pop(next)
                     curr_recipient_data.pop(next)
                 except ValueError:
                     next = 0.01
-            print("Final next owner is {}".format(next_owner))
-            print("Final description is {}".format(desc))
+            #print("Final next owner is {}".format(next_owner))
+            #print("Final description is {}".format(desc))
             if desc not in items_owned:
                 items_owned[desc] = next_owner
-            else:
-                print("Condition failed. Items owned dict: {}".format(items_owned))
 
-        print("Final items owned dict: {}".format(items_owned))
+        #print("Final items owned dict: {}".format(items_owned))
         return items_owned
 
 
